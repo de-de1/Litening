@@ -1,8 +1,8 @@
 import numpy as np
-from keras.preprocessing.image import load_img
 from keras.models import load_model
+from keras.preprocessing.image import load_img
+from src.main.python.preprocessing.label_encoding import num2class
 from src.main.python.preprocessing.normalization import normalize_image
-from src.main.python.initialization.label_encoding import num2class
 
 
 def keras_predict_sample_img(path, target_size, model):
