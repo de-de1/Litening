@@ -1,48 +1,37 @@
 import tensorflow as tf
-import numpy as np
-import os
-import matplotlib.pyplot as plt
-import glob
-import random
-from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
-from sklearn.preprocessing import OneHotEncoder
+
+
+def model(X, w1, w2, w3, w4, w_o):
+    """Create tensorflow core model for classification
+
+    Args:
+        X (tf.placeholder): input X feed
+        w1 (tf.Variable): weights of convolutional layer 1
+        w2 (tf.Variable): weights of convolutional layer 2
+        w3 (tf.Variable): weights of convolutional layer 3
+        w4 (tf.Variable): weights of convolutional layer 4
+        w_o (tf.Variable): weights of fully connected output layer
+    Returns:
+        fc_layer: logits of last layer
+    """
+
+    conv1 = tf.nn.conv2d(X, w1, strides=[1, 1, 1, 1], padding="VALID")
+    conv1_activation = tf.nn.relu(conv1)
+    conv2 = tf.nn.conv2d(conv1_activation, w2, strides=[1, 1, 1, 1], padding="VALID")
+    conv2_activation = tf.nn.relu(conv2)
+    conv2_pooling = tf.nn.max_pool(conv2_activation, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding="VALID")
+
+    conv3 = tf.nn.conv2d(conv2_pooling, w3, strides=[1, 1, 1, 1], padding="VALID")
+    conv3_activation = tf.nn.relu(conv3)
+    conv4 = tf.nn.conv2d(conv3_activation, w4, strides=[1, 1, 1, 1], padding="VALID")
+    conv4_activation = tf.nn.relu(conv4)
+    conv4_pooling = tf.nn.max_pool(conv4_activation, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding="VALID")
+
+    flatten = tf.reshape(conv4_pooling, shape=[-1, w_o.get_shape().as_list()[0]])
+    fc_layer = tf.matmul(flatten, w_o)
+
+    return fc_layer
 
 
 if __name__ == "__main__":
-    EPOCHS = 6
-    BATCH_SIZE = 16
-    IMAGE_WIDTH = 480
-    IMAGE_HEIGHT = 270
-    CHANNELS = 3
-    NUM_CLASSES = 4
-
-    classes_dict = {"BMP-1": 0, "BTR-80": 1, "T-55": 2, "T-72B": 3}
-    classes = np.array([[classes_dict["BMP-1"]], [classes_dict["BTR-80"]], [classes_dict["T-55"]],
-                        [classes_dict["T-72B"]]])
-
-    enc = OneHotEncoder()
-    enc.fit(classes)
-
-    all_files_path = glob.glob("../../resources/Litening_images/train/*/*")
-    random.shuffle(all_files_path)
-
-    num_examples = len(all_files_path)
-
-    for epoch in range(EPOCHS):
-
-        for batch_num in range(num_examples // BATCH_SIZE + 1):
-
-            batch = all_files_path[batch_num * BATCH_SIZE:(batch_num + 1) * BATCH_SIZE]
-
-            X_train_batch = np.ndarray(shape=(BATCH_SIZE, IMAGE_HEIGHT, IMAGE_WIDTH, CHANNELS))
-            Y_train_batch = np.ndarray(shape=(BATCH_SIZE, NUM_CLASSES))
-
-            for idx, file_path in enumerate(batch):
-                img = load_img(file_path, target_size=(IMAGE_HEIGHT, IMAGE_WIDTH, CHANNELS))
-                img = img_to_array(img)
-                img /= 255.0
-
-                img_class = file_path.split("\\")[-2]
-
-                X_train_batch[idx] = img
-                Y_train_batch[idx] = enc.transform(np.array([[classes_dict[img_class]]])).toarray()
+    pass

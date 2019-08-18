@@ -32,7 +32,6 @@ def cnn_model(shape, no_classes):
     model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
 
     model.add(tf.keras.layers.Flatten())
-    # model.add(tf.keras.layers.Dense(units=1024, activation='relu'))
     model.add(tf.keras.layers.Dense(units=no_classes, activation='softmax'))
     model.compile(loss=tf.keras.losses.binary_crossentropy, optimizer=tf.keras.optimizers.Adam(),
                   metrics=['accuracy'])
@@ -66,10 +65,10 @@ if __name__ == "__main__":
 
     datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1. / 255)
 
-    train_data_generator = datagen.flow_from_directory("../resources/Litening_images/train",
+    train_data_generator = datagen.flow_from_directory("../../resources/Litening_images/train",
                                                        target_size=(image_height, image_width), batch_size=BATCH_SIZE)
 
-    validation_data_generator = datagen.flow_from_directory("../resources/Litening_images/validation",
+    validation_data_generator = datagen.flow_from_directory("../../resources/Litening_images/validation",
                                                              target_size=(image_height, image_width),
                                                              batch_size=BATCH_SIZE)
 
@@ -77,8 +76,10 @@ if __name__ == "__main__":
 
     simple_cnn_model = cnn_model(input_shape, NUM_CLASSES)
 
+    get_number_parameters()
+
     simple_cnn_model.summary()
 
     simple_cnn_model.fit_generator(train_data_generator, epochs=EPOCHS, validation_data=validation_data_generator)
 
-    simple_cnn_model.save("../resources/models/basic_cnn.h5")
+    simple_cnn_model.save("../../resources/models/basic_cnn.h5")
