@@ -3,11 +3,10 @@ import numpy as np
 import glob
 import random
 from keras.preprocessing.image import load_img
-from tensorflow.python.client import device_lib
-from preprocessing.normalization import normalize_image
-from initialization.init_methods import random_normal_init
-from initialization.label_encoding import encode
-from model.tf_model import model
+from src.main.python.preprocessing.normalization import normalize_image
+from src.main.python.initialization.init_methods import random_normal_init
+from src.main.python.preprocessing.label_encoding import encode
+from src.main.python.model.tf_model import model
 
 
 if __name__ == "__main__":
@@ -30,8 +29,8 @@ if __name__ == "__main__":
 
     num_examples = len(all_files_paths)
 
-    X = tf.placeholder(dtype=tf.float32, shape=(None, IMAGE_WIDTH, IMAGE_HEIGHT, CHANNELS))
-    Y = tf.placeholder(dtype=tf.float32, shape=(None, NUM_CLASSES))
+    X = tf.placeholder(dtype=tf.float32, shape=(None, IMAGE_WIDTH, IMAGE_HEIGHT, CHANNELS), name="X")
+    Y = tf.placeholder(dtype=tf.float32, shape=(None, NUM_CLASSES), name="Y")
 
     w1 = random_normal_init(shape=[3, 3, 3, 32])
     w2 = random_normal_init(shape=[3, 3, 32, 32])
@@ -43,9 +42,9 @@ if __name__ == "__main__":
 
     Y_ = tf.nn.softmax_cross_entropy_with_logits_v2(labels=Y, logits=feed)
 
-    predict_op = tf.argmax(model(X, w1, w2, w3, w4, w_o), 1)
+    predict_op = tf.argmax(model(X, w1, w2, w3, w4, w_o), 1, name="predict")
     predict = model(X, w1, w2, w3, w4, w_o)
-    predict_softmax = tf.nn.softmax(model(X, w1, w2, w3, w4, w_o))
+    predict_softmax = tf.nn.softmax(model(X, w1, w2, w3, w4, w_o), name="predict_softmax")
 
     cost = tf.reduce_mean(Y_)
 
@@ -78,22 +77,4 @@ if __name__ == "__main__":
                 batch_cost, _ = sess.run([cost, optimizer], feed_dict={X: X_train_batch, Y: Y_train_batch})
                 print(epoch, batch_num, batch_cost)
 
-        X_sample = np.ndarray(shape=(4, IMAGE_WIDTH, IMAGE_HEIGHT, CHANNELS))
-        path1 = "C:\\Users\\Phantom\\Desktop\\Python\\development\\Litening\\src\\main\\resources\\Litening_images\\test\\BMP-1\\20190718163424_1.jpg"
-        path2 = "C:\\Users\\Phantom\\Desktop\\Python\\development\\Litening\\src\\main\\resources\\Litening_images\\test\\BTR-80\\20190714140606_1.jpg"
-        path3 = "C:\\Users\\Phantom\\Desktop\\Python\\development\\Litening\\src\\main\\resources\\Litening_images\\test\\T-55\\20190714140414_1.jpg"
-        path4 = "C:\\Users\\Phantom\\Desktop\\Python\\development\\Litening\\src\\main\\resources\\Litening_images\\test\\T-72B\\20190720165103_1.jpg"
-        # img1 = image_load(path1, (IMAGE_WIDTH, IMAGE_HEIGHT, CHANNELS))
-        # img2 = image_load(path2, (IMAGE_WIDTH, IMAGE_HEIGHT, CHANNELS))
-        # img3 = image_load(path3, (IMAGE_WIDTH, IMAGE_HEIGHT, CHANNELS))
-        # img4 = image_load(path4, (IMAGE_WIDTH, IMAGE_HEIGHT, CHANNELS))
-        # X_sample[0] = img1
-        # X_sample[1] = img2
-        # X_sample[2] = img3
-        # X_sample[3] = img4
-
-        print(sess.run(predict, feed_dict={X: X_sample}))
-        print(sess.run(predict_op, feed_dict={X: X_sample}))
-        print(sess.run(predict_softmax, feed_dict={X: X_sample}))
-
-        save_path = saver.save(sess, "../../resources/models/model.ckpt")
+        save_path = saver.save(sess, "../resources/models/model.ckpt")
