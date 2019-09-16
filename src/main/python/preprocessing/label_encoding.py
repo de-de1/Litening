@@ -32,8 +32,10 @@ def num2class(num_classes):
         elif x == 1:
             str_classes.append('btr-80')
         elif x == 2:
-            str_classes.append('t-55')
+            str_classes.append('background')
         elif x == 3:
+            str_classes.append('t-55')
+        elif x == 4:
             str_classes.append('t-72b')
     return str_classes
 
@@ -49,14 +51,16 @@ def class2num(str_classes):
 
     num_classes = []
     for x in str_classes:
-        if x == 'bmp-1':
+        if x == "bmp-1":
             num_classes.append(0)
         elif x == 'btr-80':
             num_classes.append(1)
-        elif x == 't-55':
+        elif x == 'background':
             num_classes.append(2)
-        elif x == 't-72b':
+        elif x == 't-55':
             num_classes.append(3)
+        elif x == 't-72b':
+            num_classes.append(4)
     return num_classes
 
 

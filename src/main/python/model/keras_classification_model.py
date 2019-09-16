@@ -59,7 +59,7 @@ if __name__ == "__main__":
     K.tensorflow_backend._get_available_gpus()
 
     BATCH_SIZE = 16
-    NUM_CLASSES = 4
+    NUM_CLASSES = 5
     EPOCHS = 6
     image_height, image_width = 480, 270
 

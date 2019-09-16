@@ -6,7 +6,7 @@ from keras.preprocessing.image import load_img
 from src.main.python.preprocessing.normalization import normalize_image
 from src.main.python.initialization.init_methods import random_normal_init
 from src.main.python.preprocessing.label_encoding import encode
-from src.main.python.model.tf_model import model
+from src.main.python.model.tf_classification_model import model
 
 
 if __name__ == "__main__":
@@ -15,12 +15,12 @@ if __name__ == "__main__":
     IMAGE_WIDTH = 480
     IMAGE_HEIGHT = 270
     CHANNELS = 3
-    NUM_CLASSES = 4
+    NUM_CLASSES = 5
     TRAIN_FILES_PATH = "../resources/Litening_images/train/*/*"
-    CLASSES_DICT = {"BMP-1": 0, "BTR-80": 1, "T-55": 2, "T-72B": 3}
+    CLASSES_DICT = {"BMP-1": 0, "BTR-80": 1, "Background": 2, "T-55": 3, "T-72B": 4}
 
-    classes_encoded = np.array([[CLASSES_DICT["BMP-1"]], [CLASSES_DICT["BTR-80"]], [CLASSES_DICT["T-55"]],
-                        [CLASSES_DICT["T-72B"]]])
+    classes_encoded = np.array([[CLASSES_DICT["BMP-1"]], [CLASSES_DICT["BTR-80"]], [CLASSES_DICT["Background"]],
+                                [CLASSES_DICT["T-55"]], [CLASSES_DICT["T-72B"]]])
 
     encoder = encode(classes_encoded)
 
@@ -42,9 +42,8 @@ if __name__ == "__main__":
 
     Y_ = tf.nn.softmax_cross_entropy_with_logits_v2(labels=Y, logits=feed)
 
-    predict_op = tf.argmax(model(X, w1, w2, w3, w4, w_o), 1, name="predict")
-    predict = model(X, w1, w2, w3, w4, w_o)
-    predict_softmax = tf.nn.softmax(model(X, w1, w2, w3, w4, w_o), name="predict_softmax")
+    predict = tf.argmax(feed, 1, name="predict")
+    predict_softmax = tf.nn.softmax(feed, name="predict_softmax")
 
     cost = tf.reduce_mean(Y_)
 
