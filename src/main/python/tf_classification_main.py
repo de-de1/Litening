@@ -17,10 +17,21 @@ if __name__ == "__main__":
     CHANNELS = 3
     NUM_CLASSES = 5
     TRAIN_FILES_PATH = "../resources/Litening_images/train/*/*"
-    CLASSES_DICT = {"BMP-1": 0, "BTR-80": 1, "Background": 2, "T-55": 3, "T-72B": 4}
+    CLASSES_DICT = {
+        "BMP-1": 0,
+        "BTR-80": 1,
+        "Background": 2,
+        "T-55": 3,
+        "T-72B": 4
+    }
 
-    classes_encoded = np.array([[CLASSES_DICT["BMP-1"]], [CLASSES_DICT["BTR-80"]], [CLASSES_DICT["Background"]],
-                                [CLASSES_DICT["T-55"]], [CLASSES_DICT["T-72B"]]])
+    classes_encoded = np.array(
+        [[CLASSES_DICT["BMP-1"]],
+         [CLASSES_DICT["BTR-80"]],
+         [CLASSES_DICT["Background"]],
+         [CLASSES_DICT["T-55"]],
+         [CLASSES_DICT["T-72B"]]]
+    )
 
     encoder = encode(classes_encoded)
 

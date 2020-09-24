@@ -1,9 +1,10 @@
-import numpy as np
 from keras.models import load_model
 from keras.preprocessing.image import load_img
+import numpy as np
+import tensorflow as tf
+
 from src.main.python.preprocessing.label_encoding import num2class
 from src.main.python.preprocessing.normalization import normalize_image
-import tensorflow as tf
 
 
 def keras_predict_sample_img(path, target_size):
@@ -59,8 +60,11 @@ if __name__ == "__main__":
     IMAGE_WIDTH, IMAGE_HEIGHT, CHANNELS = 480, 270, 3
 
     print(
-        keras_predict_sample_img('../../resources/Litening_images/test/BTR-80/20190714140917_1.jpg',
-                                 (IMAGE_WIDTH, IMAGE_HEIGHT, CHANNELS)))
+        keras_predict_sample_img(
+            '../../resources/Litening_images/test/BTR-80/20190714140917_1.jpg',
+            (IMAGE_WIDTH, IMAGE_HEIGHT, CHANNELS)
+        )
+    )
     print(
         keras_predict_sample_img('../../resources/Litening_images/test/T-55/20190714140241_1.jpg',
                                  (IMAGE_WIDTH, IMAGE_HEIGHT, CHANNELS)))

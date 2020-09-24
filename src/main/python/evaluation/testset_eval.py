@@ -1,13 +1,12 @@
-from keras.models import load_model
-import tensorflow as tf
 import glob
-import numpy as np
+
+from keras.models import load_model
 from keras.preprocessing.image import load_img
-from src.main.python.preprocessing.normalization import normalize_image
-from src.main.python.initialization.init_methods import random_normal_init
+import numpy as np
+import tensorflow as tf
+
 from src.main.python.preprocessing.label_encoding import encode
-from src.main.python.model.tf_classification_model import model
-from src.main.python.preprocessing.label_encoding import num2class
+from src.main.python.preprocessing.normalization import normalize_image
 
 
 def keras_evaluate_test_set(path, target_size, batch_size):
@@ -25,7 +24,11 @@ def keras_evaluate_test_set(path, target_size, batch_size):
     model = load_model("../../resources/models/basic_cnn.h5")
 
     datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1. / 255)
-    test_data_generator = datagen.flow_from_directory(path, target_size=target_size, batch_size=batch_size)
+    test_data_generator = datagen.flow_from_directory(
+        directory=path,
+        target_size=target_size,
+        batch_size=batch_size
+    )
 
     loss, accuracy = model.evaluate_generator(test_data_generator, steps=5)
 
@@ -85,8 +88,6 @@ def tf_evaluate_test_set(path, target_size, batch_size):
 
         prediction = sess.run(predict, feed_dict={X: X_test_batch})
         print(prediction)
-
-    return
 
 
 if __name__ == "__main__":

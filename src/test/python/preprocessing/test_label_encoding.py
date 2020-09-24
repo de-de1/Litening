@@ -1,7 +1,8 @@
 import numpy as np
-from src.main.python.preprocessing.label_encoding import encode, num2class, class2num
-from sklearn.preprocessing import OneHotEncoder
 import pytest
+from sklearn.preprocessing import OneHotEncoder
+
+from src.main.python.preprocessing.label_encoding import encode, num2class, class2num
 
 
 class TestLabelEncoding:
@@ -64,6 +65,3 @@ class TestLabelEncoding:
         result = class2num(classes)
 
         assert result == []
-
-if __name__ == "__main__":
-    pass
