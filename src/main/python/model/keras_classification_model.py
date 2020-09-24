@@ -1,6 +1,8 @@
+from keras import backend as K
 import tensorflow as tf
 from tensorflow.python.client import device_lib
-from keras import backend as K
+
+from src.main.python.settings_classfication import *
 
 
 def cnn_model(shape, no_classes):
@@ -63,25 +65,22 @@ if __name__ == "__main__":
     print(device_lib.list_local_devices())
     K.tensorflow_backend._get_available_gpus()
 
-    BATCH_SIZE = 16
-    NUM_CLASSES = 5
-    EPOCHS = 6
-    image_height, image_width = 480, 270
+    epochs = 6
 
     datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1. / 255)
     train_data_generator = datagen.flow_from_directory(
         directory="../../resources/Litening_images/train",
-        target_size=(image_height, image_width),
+        target_size=(IMAGE_HEIGHT, IMAGE_WIDTH),
         batch_size=BATCH_SIZE,
     )
 
     validation_data_generator = datagen.flow_from_directory(
         directory="../../resources/Litening_images/validation",
-        target_size=(image_height, image_width),
+        target_size=(IMAGE_HEIGHT, IMAGE_WIDTH),
         batch_size=BATCH_SIZE,
     )
 
-    input_shape = (image_height, image_width, 3)
+    input_shape = (IMAGE_HEIGHT, IMAGE_WIDTH, CHANNELS)
     simple_cnn_model = cnn_model(input_shape, NUM_CLASSES)
 
     get_number_parameters()
@@ -89,7 +88,7 @@ if __name__ == "__main__":
     simple_cnn_model.summary()
     simple_cnn_model.fit_generator(
         generator=train_data_generator,
-        epochs=EPOCHS,
+        epochs=epochs,
         validation_data=validation_data_generator,
     )
 
